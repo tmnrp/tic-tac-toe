@@ -3,7 +3,7 @@ import "./TicTacToe.css";
 
 const scoreX = [];
 const scoreO = [];
-const boardSize = 4;
+const boardSize = 3;
 const TicTacToe = () => {
   return (
     <div className="tic-tac-toe">
@@ -61,11 +61,15 @@ const onTileClick = (e, setValue, id) => {
 
 const checkWinner = (score) => {
   checkHorizontal(score);
+  console.log(score);
 };
 
 const checkHorizontal = (score) => {
-  for (let i = 0; i < boardSize; i++) {
-    for (let i = 0; i < boardSize; i++) {}
+  debugger;
+  for (let i = 0; i < boardSize.length; i++) {
+    for (let j = 0; j < boardSize.length; j++) {
+      debugger;
+    }
   }
 };
 
