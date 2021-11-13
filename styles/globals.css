@@ -1,0 +1,51 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+/*  */
+:root {
+  --cell-size: 100px;
+  --cell-item-size: calc(var(--cell-size) * 0.9);
+}
+
+.cell {
+  background-color: hsl(242, 21%, 67%);
+  height: var(--cell-size);
+  width: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: hsl(242, 21%, 80%);
+}
+
+.cell.cross::before,
+.cell.cross::after {
+  content: "";
+  position: absolute;
+  background-color: black;
+  height: var(--cell-item-size);
+  width: calc(var(--cell-item-size) * 0.2);
+}
+
+.cell.cross::before {
+  transform: rotate(-45deg);
+}
+
+.cell.cross::after {
+  transform: rotate(45deg);
+}
