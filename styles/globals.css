@@ -12,6 +12,10 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /*  */
 :root {
   --cell-size: 100px;
@@ -24,8 +28,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
   cursor: pointer;
+  @apply border border-green-300 rounded-sm;
 }
 
 /* */
@@ -33,9 +37,9 @@ body {
 .cell.cross::after {
   content: "";
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
   height: var(--cell-item-size);
   width: calc(var(--cell-item-size) * 0.2);
+  @apply bg-gradient-to-br from-green-500 to-blue-400;
 }
 .cell.cross::before {
   transform: rotate(-45deg);
@@ -49,9 +53,9 @@ body {
 .cell:hover.cross-hover::after {
   content: "";
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
   height: var(--cell-item-size);
   width: calc(var(--cell-item-size) * 0.2);
+  @apply bg-gradient-to-br from-green-500 to-blue-400 opacity-60;
 }
 .cell:hover.cross-hover::before {
   transform: rotate(-45deg);
@@ -70,12 +74,12 @@ body {
 .cell.circle::before {
   height: 80px;
   width: 80px;
-  background-color: rgba(0, 0, 0, 0.9);
+  @apply bg-gradient-to-br from-green-500 to-blue-400;
 }
 .cell.circle::after {
   height: 50px;
   width: 50px;
-  background-color: white;
+  @apply bg-gradient-to-br from-blue-400 to-green-700;
 }
 
 /* */
@@ -88,12 +92,12 @@ body {
 .cell:hover.circle-hover::before {
   height: 80px;
   width: 80px;
-  background-color: rgba(0, 0, 0, 0.1);
+  @apply bg-gradient-to-br from-green-500 to-blue-400 opacity-80;
 }
 .cell:hover.circle-hover::after {
-  height: 60px;
-  width: 60px;
-  background-color: white;
+  height: 50px;
+  width: 50px;
+  @apply bg-gradient-to-br from-blue-400 to-green-700 opacity-80;
 }
 
 /* */

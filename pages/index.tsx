@@ -3,12 +3,7 @@ import { Board } from "../components/Board";
 const Home = () => {
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
+      className={`flex justify-center items-center h-screen bg-gradient-to-br from-blue-700 to-green-600 text-white`}
     >
       <Board mode={3} />
     </div>
