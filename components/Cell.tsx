@@ -2,15 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { VStaggerItems } from "./Board";
 
-// export const Cell = ({}: ICellProps) => {
-//   return (
-//     <motion.div
-//       variants={VStaggerItems}
-//       className="cell h-20 w-20 border border-green-300"
-//     />
-//   );
-// };
-
+//
 export const Cell = ({ player, index, onClick, ...props }: ICellProps) => {
   const [value, setValue] = useState<
     "cross" | "cross-hover" | "circle" | "circle-hover"
@@ -29,6 +21,7 @@ export const Cell = ({ player, index, onClick, ...props }: ICellProps) => {
   return (
     <motion.div
       variants={VStaggerItems}
+      viewport={{ once: true }}
       key={`${player} index-${index}`}
       className={`cell index-${index} ${value}`}
       {...props}

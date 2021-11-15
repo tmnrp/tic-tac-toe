@@ -50,17 +50,17 @@ export const Board = ({ mode = 3 }: { mode: number }) => {
 
       {cells && (
         <motion.div
-          key={resetCounter}
           variants={VStaggerContainer}
           initial="initial"
           animate="animate"
+          viewport={{ once: true }}
           className="grid"
           style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
         >
           {cells &&
             cells.map((index) => (
               <Cell
-                key={index}
+                key={`${resetCounter}-${index}`}
                 index={index}
                 player={player}
                 onClick={() => togglePlayer()}
