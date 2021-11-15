@@ -1,45 +1,67 @@
-/*  */
+/* CROSS  */
 .cell.cross::before {
   content: "";
   @apply w-3 h-5/6 bg-gradient-to-br from-green-500 to-blue-500 transform rotate-45 absolute;
 }
-
 .cell.cross::after {
   content: "";
   @apply w-3 h-5/6 bg-gradient-to-br from-green-500 to-blue-500 transform -rotate-45 absolute;
 }
 
-/*  */
+/* CROSS HOVER  */
 .cell:hover.cross-hover::before {
   content: "";
   @apply w-3 h-5/6 bg-gradient-to-br from-green-500 to-blue-500 opacity-60 transform rotate-45 absolute;
 }
-
 .cell:hover.cross-hover::after {
   content: "";
   @apply w-3 h-5/6 bg-gradient-to-br from-green-500 to-blue-500  opacity-80 transform -rotate-45 absolute;
 }
 
+/* ANIMATED CROSS HOVER */
+.animate-pulse .cell.cross::before {
+  content: "";
+  @apply w-3 h-5/6 bg-gradient-to-br from-green-400 to-blue-400 transform rotate-45 absolute;
+}
+.animate-pulse .cell.cross::after {
+  content: "";
+  @apply w-3 h-5/6 bg-gradient-to-br from-green-400 to-blue-400 transform -rotate-45 absolute;
+}
+
 /*                                           */
 
-/*  */
+/* CIRCLE  */
 .cell.circle::before {
   content: "";
   @apply w-5/6 h-5/6 rounded-full bg-gradient-to-br from-green-500 to-blue-500 transform rotate-45 absolute;
 }
-
 .cell.circle::after {
   content: "";
   @apply w-1/2 h-1/2 rounded-full bg-gradient-to-br from-blue-600 to-green-600 transform -rotate-45 absolute;
 }
 
-/*  */
+/* CIRCLE HOVER  */
 .cell:hover.circle-hover::before {
   content: "";
   @apply w-5/6 h-5/6 rounded-full bg-gradient-to-br from-green-500 to-blue-500 opacity-60 transform rotate-45 absolute;
 }
-
 .cell:hover.circle-hover::after {
   content: "";
   @apply w-1/2 h-1/2 rounded-full bg-gradient-to-br from-blue-600 to-green-600  opacity-80 transform -rotate-45 absolute;
+}
+
+/* ANIMATED CIRCLE HOVER  */
+.animate-pulse .cell.circle::before {
+  content: "";
+  @apply w-5/6 h-5/6 rounded-full bg-gradient-to-br from-green-400 to-blue-400 transform rotate-45 absolute;
+}
+.animate-pulse .cell.circle::after {
+  content: "";
+  @apply w-1/2 h-1/2 rounded-full bg-gradient-to-br from-blue-500 to-green-500 transform -rotate-45 absolute;
+}
+
+/*                      */
+.cell.cross,
+.cell.circle {
+  cursor: not-allowed;
 }

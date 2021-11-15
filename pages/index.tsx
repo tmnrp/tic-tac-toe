@@ -27,6 +27,43 @@ const Home = () => {
   );
 
   //
+  const checkWinnerHorizontally = (tileNumber: number) => {
+    let temp = tileNumber + 1;
+    while (temp % mode !== 0) {
+      temp = temp + 1;
+    }
+
+    let hasWon = true;
+    for (let i = temp - mode; i < temp; i++) {
+      const el = document.querySelector(`.tile-${i} .cell`);
+      !el?.classList.contains(player) && (hasWon = false);
+    }
+
+    if (hasWon) {
+      for (let i = temp - mode; i < temp; i++) {
+        const elTile = document.querySelector(`.tile-${i}`);
+        elTile?.classList.replace("border", "border-4");
+        elTile?.classList.add("animate-pulse");
+      }
+
+      //
+      //alert(`Player ${player} has won !!!`);
+      //resetGame();
+    }
+  };
+
+  //
+  const checkWinnerVertically = (tileNumber: number) => {
+    let temp = tileNumber + 1;
+    while (temp % mode !== 0) {
+      temp = temp + 1;
+    }
+  };
+
+  //
+  const checkWinnerDiagonally = (tileNumber: number) => {};
+
+  //
   const markSelected = useCallback(
     (tileNumber: number) => {
       const el = document.querySelector(`.tile-${tileNumber} .cell`);
@@ -38,6 +75,7 @@ const Home = () => {
         el?.classList.add(player);
         el?.classList.remove(`${player}-hover`);
         togglePlayer();
+        checkWinnerHorizontally(tileNumber);
       }
     },
     [player]
