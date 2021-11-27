@@ -1,108 +1,196 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
+import confetti from "canvas-confetti";
 
 const Home = () => {
-  //
-  const [resetCounter, setResetCounter] = useState<number>(0);
-  const resetGame = useCallback(
-    () => setResetCounter((resetCounter) => ++resetCounter),
-    []
-  );
-
-  // generate tiles
-  const mode = 3;
-  const [tileNumbers, setTileNumbers] = useState(
-    Array.from(Array(mode * mode).keys())
-  );
-  useEffect(() => {
-    resetCounter > 0 &&
-      setTileNumbers([...Array.from(Array(mode * mode).keys())]);
-  }, [resetCounter]);
-
   //
   const [player, setPlayer] = useState<"cross" | "circle">("cross");
   const togglePlayer = useCallback(
     () => setPlayer((player) => (player === "cross" ? "circle" : "cross")),
     []
   );
+  const [playerWon, setPlayerWon] = useState<"cross" | "circle" | undefined>();
+  useEffect(() => {
+    if (playerWon) {
+      confetti();
+      for (let i = 1; i <= mode; i++) {
+        for (let j = 1; j <= mode; j++) {
+          const el = document.querySelector(`.tile-${i}-${j} .cell`);
+          el?.classList.add(`disabled`);
+          el?.classList.remove(`circle-hover`);
+          el?.classList.remove(`cross-hover`);
+        }
+      }
+    }
+  }, [playerWon]);
 
   //
-  const checkWinnerHorizontally = (tileNumber: number) => {
-    let temp = tileNumber + 1;
-    while (temp % mode !== 0) {
-      temp = temp + 1;
-    }
+  const [resetCounter, setResetCounter] = useState<number>(0);
+  const resetGame = useCallback(() => {
+    setPlayerWon(undefined);
+    setResetCounter((resetCounter) => ++resetCounter);
+  }, []);
 
+  // generate tiles
+  const mode = 3;
+  const generateTiles = useCallback((mode) => {
+    const temp = [];
+    for (let i = 1; i <= mode; i++) {
+      for (let j = 1; j <= mode; j++) {
+        temp.push(`${i}-${j}`);
+      }
+    }
+    return temp;
+  }, []);
+
+  const tileNumbers: Array<string> = generateTiles(mode);
+
+  //
+  const updateTileType = useCallback(
+    (tileNumber: string) => {
+      if (!playerWon) {
+        const el = document.querySelector(`.tile-${tileNumber} .cell`);
+        const isSelected =
+          el?.classList.contains("cross") || el?.classList.contains("circle");
+
+        //
+        if (!isSelected) {
+          el?.classList.add(`${player}-hover`);
+          el?.classList.remove(
+            player === "cross" ? "circle-hover" : "cross-hover"
+          );
+        }
+      }
+    },
+    [player, playerWon]
+  );
+
+  //
+  const checkWinnerHorizontally = useCallback(
+    (tileNumber: string) => {
+      const tile = tileNumber.split("-");
+      let hasWon = true;
+      for (let i = 1; i <= mode; i++) {
+        const el = document.querySelector(`.tile-${tile[0]}-${i} .cell`);
+        !el?.classList.contains(player) && (hasWon = false);
+      }
+
+      if (hasWon) {
+        for (let i = 1; i <= mode; i++) {
+          const elTile = document.querySelector(`.tile-${tile[0]}-${i}`);
+          elTile?.classList.replace("border", "border-4");
+          elTile?.classList.add("animate-pulse");
+        }
+        setPlayerWon(player);
+      }
+    },
+    [player]
+  );
+
+  //
+  const checkWinnerVertically = useCallback(
+    (tileNumber: string) => {
+      const tile = tileNumber.split("-");
+      let hasWon = true;
+      for (let i = 1; i <= mode; i++) {
+        const el = document.querySelector(`.tile-${i}-${tile[1]} .cell`);
+        !el?.classList.contains(player) && (hasWon = false);
+      }
+
+      if (hasWon) {
+        for (let i = 1; i <= mode; i++) {
+          const elTile = document.querySelector(`.tile-${i}-${tile[1]}`);
+          elTile?.classList.replace("border", "border-4");
+          elTile?.classList.add("animate-pulse");
+        }
+        setPlayerWon(player);
+      }
+    },
+    [player]
+  );
+
+  //
+  const checkWinnerDiagonallyTopLeftToBottomRight = useCallback(() => {
     let hasWon = true;
-    for (let i = temp - mode; i < temp; i++) {
-      const el = document.querySelector(`.tile-${i} .cell`);
+    for (let i = 1; i <= mode; i++) {
+      const el = document.querySelector(`.tile-${i}-${i} .cell`);
       !el?.classList.contains(player) && (hasWon = false);
     }
 
     if (hasWon) {
-      for (let i = temp - mode; i < temp; i++) {
-        const elTile = document.querySelector(`.tile-${i}`);
+      for (let i = 1; i <= mode; i++) {
+        const elTile = document.querySelector(`.tile-${i}-${i}`);
         elTile?.classList.replace("border", "border-4");
         elTile?.classList.add("animate-pulse");
       }
-
-      //
-      //alert(`Player ${player} has won !!!`);
-      //resetGame();
+      setPlayerWon(player);
     }
-  };
+  }, [player]);
 
   //
-  const checkWinnerVertically = (tileNumber: number) => {
-    let temp = tileNumber + 1;
-    while (temp % mode !== 0) {
-      temp = temp + 1;
+  const checkWinnerDiagonallyBottomLeftToTopRight = useCallback(() => {
+    let x = mode;
+    let y = 1;
+    let hasWon = true;
+    for (let i = 1; i <= mode; i++) {
+      const el = document.querySelector(`.tile-${x--}-${y++} .cell`);
+      !el?.classList.contains(player) && (hasWon = false);
     }
-  };
 
-  //
-  const checkWinnerDiagonally = (tileNumber: number) => {};
+    if (hasWon) {
+      let x = mode;
+      let y = 1;
+      for (let i = 1; i <= mode; i++) {
+        const elTile = document.querySelector(`.tile-${x--}-${y++}`);
+        elTile?.classList.replace("border", "border-4");
+        elTile?.classList.add("animate-pulse");
+      }
+      setPlayerWon(player);
+    }
+  }, [player]);
 
   //
   const markSelected = useCallback(
-    (tileNumber: number) => {
-      const el = document.querySelector(`.tile-${tileNumber} .cell`);
-      const isSelected =
-        el?.classList.contains("cross") || el?.classList.contains("circle");
+    (tileNumber: string) => {
+      if (!playerWon) {
+        const el = document.querySelector(`.tile-${tileNumber} .cell`);
+        const isSelected =
+          el?.classList.contains("cross") || el?.classList.contains("circle");
 
-      //
-      if (!isSelected) {
-        el?.classList.add(player);
-        el?.classList.remove(`${player}-hover`);
-        togglePlayer();
-        checkWinnerHorizontally(tileNumber);
+        //
+        if (!isSelected) {
+          el?.classList.add(player);
+          el?.classList.remove(`${player}-hover`);
+          checkWinnerHorizontally(tileNumber);
+          checkWinnerVertically(tileNumber);
+          checkWinnerDiagonallyTopLeftToBottomRight();
+          checkWinnerDiagonallyBottomLeftToTopRight();
+          togglePlayer();
+        }
       }
     },
-    [player]
-  );
-
-  //
-  const updateTileType = useCallback(
-    (tileNumber: number) => {
-      const el = document.querySelector(`.tile-${tileNumber} .cell`);
-      const isSelected =
-        el?.classList.contains("cross") || el?.classList.contains("circle");
-
-      //
-      if (!isSelected) {
-        el?.classList.add(`${player}-hover`);
-        el?.classList.remove(
-          player === "cross" ? "circle-hover" : "cross-hover"
-        );
-      }
-    },
-    [player]
+    [
+      player,
+      playerWon,
+      togglePlayer,
+      checkWinnerHorizontally,
+      checkWinnerVertically,
+      checkWinnerDiagonallyTopLeftToBottomRight,
+      checkWinnerDiagonallyBottomLeftToTopRight,
+    ]
   );
 
   //
   return (
-    <div className="h-screen flex justify-center items-center bg-gradient-to-br from-blue-700 to-green-600 text-white">
-      <div className="flex flex-col justify-center items-center">
+    <div className="flex items-center justify-center h-screen text-white bg-gradient-to-br from-blue-700 to-green-600">
+      <div className="flex flex-col items-center justify-center">
+        {playerWon && (
+          <div className="text-center uppercase">
+            <div className="text-3xl">Congratulations</div>
+            <div className="text-5xl">{playerWon}</div>
+            <div className="text-3xl">WON !!!</div>
+          </div>
+        )}
         <motion.div
           className={`flex justify-between items-center`}
           variants={VStaggerContainer}
@@ -111,7 +199,7 @@ const Home = () => {
         >
           <motion.div variants={VStaggerItems} className="flex tracking-widest">
             <p className="mr-2">Current player :</p>
-            <p className="uppercase font-semibold">{player}</p>
+            <p className="font-semibold uppercase">{player}</p>
           </motion.div>
           <motion.button
             variants={VStaggerItems}
